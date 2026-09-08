@@ -1,0 +1,30 @@
+---
+description: Invariantes globales de DataForge
+alwaysApply: true
+---
+# Gobernanza del proyecto
+
+- DataForge es un instalador Windows x64 para un runtime local de Apache Spark,
+  no una aplicación Python ni un producto de la ASF. El nombre no incorporará
+  Spark, PySpark, Hadoop, Python, Java ni Eclipse.
+- Lee `docs/CONSTITUTION.md` para cambios que afecten comportamiento, seguridad
+  o efectos externos.
+- `config/versions.json` es la única fuente de versiones y URLs. No hardcodees
+  ni dupliques esos valores.
+- Construye mediante `installer/build-installer.ps1`; no compiles el `.iss`
+  directamente.
+- Mantén el CPython privado bajo la instalación y no modifiques un Python
+  ajeno ni registres el lanzador `py.exe`. El descubrimiento de VS Code/Jupyter
+  usa `HKCU\Software\Python\<producto>` y un kernelspec de usuario; no
+  `PythonCore`.
+- Persiste como rutas absolutas todas las entradas que DataForge añade al
+  `PATH`: Windows puede no expandir `%VARIABLE%` durante la búsqueda de
+  comandos. Limpia solo recursos que pertenezcan a DataForge, incluidas
+  las referencias heredadas y las de un `DATAFORGE_HOME` anterior.
+- Una instalación previa del mismo `AppId` se reemplaza en el mismo
+  directorio; no se instala una segunda copia ni se mezclan ámbitos de
+  privilegios.
+- No debilites la verificación de Java, winutils, Spark, `ipykernel` y
+  `SparkSession` local.
+- Mantén los cambios acotados, observables y reversibles; informa riesgos de
+  permisos, red, cancelación y desinstalación.

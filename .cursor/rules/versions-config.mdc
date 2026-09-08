@@ -1,0 +1,21 @@
+---
+description: Contrato de versiones y fuentes de descarga
+globs: config/versions.json
+alwaysApply: false
+---
+# Configuración de versiones
+
+- `config/versions.json` es la fuente canónica de producto, versiones, URLs y
+  archivos descargados.
+- Cambia las versiones como una combinación compatible de Java, Spark,
+  PySpark, ipykernel, Python y winutils; no como valores independientes.
+- Verifica URL, nombre de archivo, raíz del archivo comprimido y ruta de
+  winutils antes de preparar staging. El prefijo CPython con PySpark e
+  ipykernel se materializa en el build y se copia a `staging/python`; no es
+  una descarga adicional en el PC.
+- Después de modificar este archivo, regenera las fichas con
+  `config/Update-Readme.ps1`, ejecuta un build desde cero y valida una
+  instalación de prueba antes de declarar la combinación soportada.
+- No copies valores concretos a scripts, reglas o documentos; actualiza el
+  contrato y el estado con evidencia de validación. No edites `README.md` ni
+  `README_developers.md` a mano.

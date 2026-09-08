@@ -1,0 +1,28 @@
+---
+description: Convenciones para scripts PowerShell del instalador
+globs: installer/**/*.ps1
+alwaysApply: false
+---
+# PowerShell del instalador
+
+- Conserva `Set-StrictMode -Version Latest` y `$ErrorActionPreference = 'Stop'`
+  en scripts principales.
+- Antes de crear helpers nuevos, revisa y reutiliza
+  `installer/scripts/common.ps1`.
+- Usa los helpers existentes para logging, progreso, ejecución de procesos,
+  rutas y modificación de `PATH`.
+- Propaga errores descriptivos al log; no ocultes fallos de comandos externos.
+- Respeta `INSTALL_CANCELLED` y evita dejar procesos hijos o cambios parciales
+  sin una ruta de limpieza.
+- No modifiques un Python ajeno ni elimines enlaces o rutas sin comprobar que
+  pertenezcan a DataForge.
+- El CPython privado se anuncia con una clave PEP 514 propia y un kernelspec
+  de usuario de nombre propio; no escribas `PythonCore` ni ejecutes
+  `ipykernel install`.
+- Mantén como rutas absolutas todas las entradas de DataForge en el `PATH`
+  de usuario y elimina las referencias heredadas `%VARIABLE%` al actualizar o
+  desinstalar. Si `DATAFORGE_HOME` apunta a otra carpeta, retira también
+  las entradas de `PATH` bajo esa raíz antes de escribir las nuevas.
+- Para un cambio de post-instalación, conserva el orden runtime Python →
+  entorno → verificación o documenta y valida explícitamente una nueva
+  dependencia.

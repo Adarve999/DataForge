@@ -1,0 +1,24 @@
+---
+description: Convenciones para Inno Setup y el wizard
+globs: installer/**/*.iss
+alwaysApply: false
+---
+# Inno Setup
+
+- `DataForge.iss` recibe valores mediante defines de
+  `build-installer.ps1`; no fijes versiones ni compiles el `.iss` a mano.
+- Mantén sincronizados los archivos incluidos, la estructura de staging y las
+  directivas de limpieza.
+- Extrae `scripts/` y `config/` a `{tmp}` con `dontcopy` y
+  `ExtractTemporaryFile`; no los copies a `{app}`.
+- Conserva el protocolo asíncrono de post-instalación: PID, cancelación,
+  progreso, log y código de salida.
+- La cancelación y la desinstalación deben limpiar solo recursos que pertenecen
+  a DataForge, incluido el registro PEP 514 propio y el kernelspec de
+  usuario.
+- Al reinstalar, detecta la copia previa del mismo `AppId`, reemplaza en el
+  mismo directorio y rechaza un segundo árbol o un ámbito de privilegios
+  distinto. El contrato está en `docs/PROJECT_SPECIFICATION.md`.
+- Mantén coherentes los mensajes en español e inglés cuando cambie la UI.
+- Antes de cambiar el flujo de desinstalación, revisa también
+  `installer/scripts/uninstall-env.ps1` para evitar mayor divergencia.

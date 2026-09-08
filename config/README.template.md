@@ -1,18 +1,18 @@
-# DataForge
+# {{productName}}
 
-[![DataForge](https://img.shields.io/badge/DataForge-0.0.1-2563eb)](https://github.com/Adarve999/DataForge/releases/latest)
-[![Eclipse Temurin 17](https://img.shields.io/badge/Eclipse%20Temurin-17-ed8b00?logo=openjdk&logoColor=white)](https://adoptium.net/)
-[![Python 3.11.9](https://img.shields.io/badge/Python-3.11.9-3776ab?logo=python&logoColor=white)](https://www.python.org/)
-[![Apache Spark 3.5.9](https://img.shields.io/badge/Apache%20Spark-3.5.9-e25a1c)](https://spark.apache.org/)
-[![PySpark 3.5.9](https://img.shields.io/badge/PySpark-3.5.9-e25a1c)](https://spark.apache.org/docs/latest/api/python/)
-[![Windows 10/11](https://img.shields.io/badge/Windows-10%2F11-0078d6?logo=windows&logoColor=white)](https://www.microsoft.com/windows/)
+[![{{productName}}](https://img.shields.io/badge/{{productName}}-{{productVersion}}-2563eb)]({{latestUrl}})
+[![Eclipse Temurin {{javaMajorVersion}}](https://img.shields.io/badge/Eclipse%20Temurin-{{javaMajorVersion}}-ed8b00?logo=openjdk&logoColor=white)](https://adoptium.net/)
+[![Python {{pythonVersion}}](https://img.shields.io/badge/Python-{{pythonVersion}}-3776ab?logo=python&logoColor=white)](https://www.python.org/)
+[![Apache Spark {{sparkVersion}}](https://img.shields.io/badge/Apache%20Spark-{{sparkVersion}}-e25a1c)](https://spark.apache.org/)
+[![PySpark {{pysparkVersion}}](https://img.shields.io/badge/PySpark-{{pysparkVersion}}-e25a1c)](https://spark.apache.org/docs/latest/api/python/)
+[![{{platform}}](https://img.shields.io/badge/Windows-{{platformBadgeMessage}}-0078d6?logo=windows&logoColor=white)](https://www.microsoft.com/windows/)
 
-**DataForge, powered by Apache Spark** es un instalador comunitario para
-Windows 10/11. No está afiliado a The Apache Software Foundation. Deja un
+**{{productName}}, powered by Apache Spark** es un instalador comunitario para
+{{platform}}. No está afiliado a The Apache Software Foundation. Deja un
 runtime local de Apache Spark listo para usar.
 
 Este repositorio publica las versiones. El instalador y las notas de cada
-entrega están en [Releases](https://github.com/Adarve999/DataForge/releases).
+entrega están en [Releases]({{releasesUrl}}).
 
 ## Índice
 
@@ -27,36 +27,36 @@ entrega están en [Releases](https://github.com/Adarve999/DataForge/releases).
 
 ## Descargar
 
-1. Abre la [última Release](https://github.com/Adarve999/DataForge/releases/latest).
-2. Descarga `DataForge-Setup-*.exe`.
+1. Abre la [última Release]({{latestUrl}}).
+2. Descarga `{{setupGlob}}`.
 3. Ejecútalo. No hace falta Internet durante la instalación.
 4. Abre una **nueva** terminal o el acceso directo **Apache Spark shell**.
 
 ## Componentes
 
-La tabla refleja la entrega **0.0.1** anunciada en este README.
-Cada [Release](https://github.com/Adarve999/DataForge/releases) puede traer otras versiones; en ese caso
+La tabla refleja la entrega **{{productVersion}}** anunciada en este README.
+Cada [Release]({{releasesUrl}}) puede traer otras versiones; en ese caso
 prevalece la tabla de esa entrega.
 
 | Componente | Versión |
 |------------|---------|
-| Java (Eclipse Temurin) | 17 |
-| Apache Spark | 3.5.9 |
-| PySpark | 3.5.9 |
-| ipykernel | 7.3.0 |
-| winutils (Hadoop) | 3.3.6 |
-| CPython oficial | 3.11.9 |
+| Java (Eclipse Temurin) | {{javaMajorVersion}} |
+| Apache Spark | {{sparkVersion}} |
+| PySpark | {{pysparkVersion}} |
+| ipykernel | {{ipykernelVersion}} |
+| winutils (Hadoop) | {{hadoopWinutilsVersion}} |
+| CPython oficial | {{pythonVersion}} |
 
 ## Qué hace el instalador
 
 Copia un runtime autocontenido en `{InstallDir}` (por defecto
-`C:\Program Files\DataForge`):
+`{{defaultInstallDir}}`):
 
 - Eclipse Temurin, Apache Spark, winutils de Apache Hadoop y un CPython
   oficial con PySpark e ipykernel
-- Variables de usuario: `DATAFORGE_HOME`, `JAVA_HOME`, `SPARK_HOME`,
+- Variables de usuario: `{{homeVar}}`, `JAVA_HOME`, `SPARK_HOME`,
   `HADOOP_HOME`, `PYSPARK_PYTHON` y `PYSPARK_DRIVER_PYTHON`
-- Accesos directos **Apache Spark shell** y **Python (DataForge)**
+- Accesos directos **Apache Spark shell** y **{{pythonShortcut}}**
 - Comprobación de que `pyspark` arranca en local y de que `ipykernel`
   se importa
 
@@ -73,7 +73,7 @@ Tras instalar, la raíz contiene `java/`, `spark/`, `hadoop/`,
 pyspark
 ```
 
-O desde el acceso directo **Python (DataForge)**:
+O desde el acceso directo **{{pythonShortcut}}**:
 
 ```powershell
 python -c "import ipykernel; print(ipykernel.__version__)"
@@ -87,14 +87,14 @@ instalan con `python -m pip` y pueden requerir red.
 
 | Variable | Valor |
 |----------|-------|
-| `DATAFORGE_HOME` | Directorio de instalación |
+| `{{homeVar}}` | Directorio de instalación |
 | `JAVA_HOME` | `{InstallDir}\java` |
 | `SPARK_HOME` | `{InstallDir}\spark` |
 | `HADOOP_HOME` | `{InstallDir}\hadoop` |
 | `PYSPARK_PYTHON` | `{InstallDir}\python\python.exe` |
 | `PYSPARK_DRIVER_PYTHON` | Igual que `PYSPARK_PYTHON` |
 
-Las rutas que DataForge añade al `PATH` de usuario son absolutas bajo
+Las rutas que {{productName}} añade al `PATH` de usuario son absolutas bajo
 `{InstallDir}`. Tras instalar, abre una terminal nueva.
 
 ## Logs
@@ -115,7 +115,7 @@ contenido de la instalación. No toca otras instalaciones de Python.
 
 - El `.exe` incluye el runtime; el tamaño es grande (cientos de MiB).
 - `HADOOP_HOME` apunta a la carpeta que contiene `bin\winutils.exe`.
-- DataForge no está afiliado a The Apache Software Foundation, Eclipse
+- {{productName}} no está afiliado a The Apache Software Foundation, Eclipse
   Foundation AISBL ni Python Software Foundation. Apache Spark™ y Spark™
   son marcas de la ASF. Ver [marcas de Apache Spark](https://spark.apache.org/trademarks.html).
 - El instalador se publica bajo la licencia MIT del archivo `LICENSE`

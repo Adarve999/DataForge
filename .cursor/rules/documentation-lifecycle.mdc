@@ -1,0 +1,20 @@
+---
+description: Mantiene la documentación viva y basada en evidencia
+alwaysApply: true
+---
+# Ciclo de vida documental
+
+- Usa `docs/README.md` como índice y lee el documento relevante antes de
+  cambios sustantivos.
+- Distingue hechos verificados, contratos comprometidos y propuestas abiertas.
+- Tras verificar un cambio de arquitectura, configuración, efecto externo,
+  prueba, release o riesgo, actualiza el documento correspondiente en `docs/`.
+- Actualiza `docs/PROJECT_STATUS.md` solo con evidencia factual; no presentes
+  revisión estática como prueba de ejecución.
+- Registra en `docs/DECISIONS.md` decisiones duraderas con alternativas o
+  consecuencias relevantes.
+- No dupliques valores vivos de `config/versions.json`; enlázalos o describe
+  su contrato. `README.md` y `README_developers.md` se regeneran con
+  `config/Update-Readme.ps1`; edita las plantillas, no las fichas generadas.
+- Mantén reglas breves y remite a la documentación extensa en lugar de
+  copiarla.

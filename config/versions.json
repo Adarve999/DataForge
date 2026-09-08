@@ -1,0 +1,40 @@
+{
+  "productName": "DataForge",
+  "productVersion": "0.0.1",
+  "sparkVersion": "3.5.9",
+  "pysparkVersion": "3.5.9",
+  "hadoopWinutilsVersion": "3.3.6",
+  "javaMajorVersion": 17,
+  "pythonVersion": "3.11.9",
+  "ipykernelVersion": "7.3.0",
+  "distribution": {
+    "repository": "https://github.com/Adarve999/DataForge",
+    "platform": "Windows 10/11",
+    "defaultInstallDir": "C:\\Program Files\\DataForge"
+  },
+  "downloads": {
+    "spark": {
+      "url": "https://downloads.apache.org/spark/spark-3.5.9/spark-3.5.9-bin-hadoop3.tgz",
+      "filename": "spark-3.5.9-bin-hadoop3.tgz",
+      "archiveInnerDir": "spark-3.5.9-bin-hadoop3",
+      "targetDir": "spark"
+    },
+    "java": {
+      "url": "https://api.adoptium.net/v3/binary/latest/17/ga/windows/x64/jdk/hotspot/normal/eclipse?project=jdk",
+      "filename": "jdk-17-windows-x64.zip",
+      "targetDir": "java"
+    },
+    "winutils": {
+      "repo": "cdarlint/winutils",
+      "branch": "master",
+      "filename": "winutils-master.zip",
+      "sourcePath": "hadoop-3.3.6/bin",
+      "targetDir": "hadoop/bin"
+    },
+    "python": {
+      "url": "https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe",
+      "filename": "python-3.11.9-amd64.exe",
+      "targetDir": "python"
+    }
+  }
+}

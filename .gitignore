@@ -1,0 +1,17 @@
+# Build artifacts
+installer/staging/
+installer/dist/
+installer/downloads/
+*.exe
+!installer/assets/*.exe
+
+# Logs
+*.log
+
+# OS
+Thumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
