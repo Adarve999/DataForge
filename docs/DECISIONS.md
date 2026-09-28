@@ -454,6 +454,32 @@ código o a la arquitectura.
   ambas fichas con `productVersion` del manifiesto. No equivale a un
   build ni a una instalación.
 
+## D-023 — Aviso de licencia según el idioma del wizard
+
+- **Estado:** aceptada y aplicada.
+- **Fecha:** 2026-09-28.
+- **Contexto:** `Write-LicenseFile` escribía un único `LICENSE.txt` con el
+  texto propio de DataForge duplicado en español e inglés. El wizard lo
+  mostraba entero en la página de licencia, con independencia del idioma
+  elegido.
+- **Decisión:** el build genera `LICENSE.es.txt` y `LICENSE.en.txt`. El
+  texto propio (independencia, marcas, aviso y lista de componentes) va en
+  el idioma del archivo. Las licencias de terceros y el texto MIT del
+  instalador permanecen en su idioma original. Cada entrada de
+  `[Languages]` usa su `LicenseFile`. Inno copia a `{app}\LICENSE.txt` solo
+  el archivo del idioma seleccionado.
+- **Consecuencias:** la página de licencia y el archivo instalado siguen el
+  idioma del wizard, incluido `/LANG=`. Deja de generarse un `LICENSE.txt`
+  bilingüe en staging. Sigue sin ser una segunda fuente canónica de
+  versiones. `build-installer.ps1` se guarda en UTF-8 con BOM para que
+  Windows PowerShell 5.1 no corrompa los acentos del texto español.
+- **Evidencia o validación:** el parser de PowerShell aceptó
+  `build-installer.ps1`. `Write-LicenseFile` escribió
+  `installer/staging/LICENSE.es.txt` y `LICENSE.en.txt` desde
+  `config/versions.json`: el prefacio va en un solo idioma y las secciones
+  de terceros más el texto MIT siguen en inglés. No se recompiló el `.exe`
+  ni se recorrió la página de licencia del wizard.
+
 ## Cuestiones abiertas
 
 ### O-001 — Consolidar la desinstalación

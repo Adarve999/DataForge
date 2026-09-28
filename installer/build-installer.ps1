@@ -1,4 +1,6 @@
-# Descarga componentes, prepara staging y compila el instalador con Inno Setup
+﻿# Descarga componentes, prepara staging y compila el instalador con Inno Setup
+# Guardar este archivo en UTF-8 con BOM. Windows PowerShell 5.1, si no ve
+# la marca, malinterpreta los acentos del aviso de licencia.
 [CmdletBinding()]
 param(
     [switch]$SkipDownload,
@@ -153,7 +155,7 @@ function Reset-StagingLayout {
             Remove-DirectoryRetry -Path $path
         }
     }
-    foreach ($name in @('LICENSE.txt', 'PRODUCT_INFO.txt')) {
+    foreach ($name in @('LICENSE.txt', 'LICENSE.es.txt', 'LICENSE.en.txt', 'PRODUCT_INFO.txt')) {
         $path = Join-Path $Root $name
         if (Test-Path $path) {
             Remove-Item -Force $path
@@ -289,28 +291,101 @@ function Sync-StagingAssets {
 function Write-LicenseFile {
     param(
         [Parameter(Mandatory)][string]$Path,
-        [Parameter(Mandatory)]$Config
+        [Parameter(Mandatory)]$Config,
+        [Parameter(Mandatory)][ValidateSet('spanish', 'english')][string]$Language
     )
 
-    $text = @"
+    # Texto propio de DataForge, en el idioma del wizard. Las licencias de
+    # terceros se añaden después, en su idioma original.
+    $componentTable = @"
+  $($Config.productName.PadRight(28))$($Config.productVersion)
+  $('Eclipse Temurin JDK'.PadRight(28))$($Config.javaMajorVersion.ToString().PadRight(10))GPLv2 + Classpath Exception
+  $('Apache Spark'.PadRight(28))$($Config.sparkVersion.PadRight(10))Apache License 2.0
+  $('PySpark'.PadRight(28))$($Config.pysparkVersion.PadRight(10))Apache License 2.0
+  $('ipykernel'.PadRight(28))$($Config.ipykernelVersion.PadRight(10))BSD 3-Clause
+  $('Apache Hadoop winutils'.PadRight(28))$($Config.hadoopWinutilsVersion.PadRight(10))Apache License 2.0
+  $('CPython'.PadRight(28))$($Config.pythonVersion.PadRight(10))PSF License Version 2
+"@
+
+    if ($Language -eq 'spanish') {
+        $preface = @"
 $($Config.productName)
 Copyright (C) 2026 the $($Config.productName) contributors
 
 ================================================================================
-Independencia y marcas / Independence and trademarks
+Independencia y marcas
 ================================================================================
 
 $($Config.productName) es un instalador comunitario independiente. No es un
 producto oficial de The Apache Software Foundation, Eclipse Foundation AISBL
-ni Python Software Foundation. No esta afiliado, respaldado ni patrocinado
+ni de la Python Software Foundation. No está afiliado, respaldado ni patrocinado
 por esas organizaciones.
+
+Forma descriptiva permitida por la ASF: "$($Config.productName), powered by Apache Spark".
+https://spark.apache.org/trademarks.html
+https://www.apache.org/foundation/marks/
+
+Apache, Apache Spark, Spark, Apache Hadoop, Hadoop, el logotipo de Spark y
+las marcas relacionadas son marcas de la Apache Software Foundation.
+
+Eclipse y Eclipse Temurin son marcas de Eclipse Foundation AISBL.
+https://www.eclipse.org/legal/logo-guidelines/
+
+Python es una marca registrada de la Python Software Foundation.
+https://www.python.org/psf/trademarks/
+
+Java es una marca de Oracle y/o sus filiales.
+
+Este instalador no usa logotipos de Apache Spark ni de Eclipse. El nombre
+del producto no contiene Spark, PySpark, Hadoop, Python, Java ni Apache.
+
+================================================================================
+Aviso de licencias
+================================================================================
+
+Este instalador copia un runtime local que incluye Apache Spark y PySpark.
+No cambia la licencia del software de terceros: cada componente conserva
+su copyright y su licencia original. Las versiones de esta copia se leyeron
+de config/versions.json durante la construcción del instalador.
+
+$($Config.productName) entrega este runtime "TAL CUAL", sin garantía de ningún tipo,
+en la medida permitida por la ley.
+
+Al instalar, acepta los términos de cada componente incluido.
+
+================================================================================
+Componentes de esta copia
+================================================================================
+
+$($componentTable.TrimEnd())
+
+Las licencias completas viajan con cada componente:
+
+  java\     LICENSE, legal\          Eclipse Temurin / OpenJDK
+  spark\    LICENSE, NOTICE          Apache Spark y bibliotecas incluidas
+  hadoop\   LICENSE.txt, NOTICE      atribución de winutils de Apache Hadoop
+  python\   LICENSE.txt              CPython
+  python\   Lib\site-packages        PySpark, ipykernel y dependencias de pip
+
+Este archivo no es una segunda fuente canónica de versiones.
+
+Los apartados siguientes reproducen o resumen cada licencia en su idioma original.
+"@
+    }
+    else {
+        $preface = @"
+$($Config.productName)
+Copyright (C) 2026 the $($Config.productName) contributors
+
+================================================================================
+Independence and trademarks
+================================================================================
 
 $($Config.productName) is an independent community installer. It is not an
 official product of the Apache Software Foundation, Eclipse Foundation AISBL,
 or the Python Software Foundation. It is not affiliated with, endorsed by,
 or sponsored by those organizations.
 
-Uso descriptivo permitido por la ASF: "$($Config.productName), powered by Apache Spark".
 ASF-permitted descriptive form: "$($Config.productName), powered by Apache Spark".
 https://spark.apache.org/trademarks.html
 https://www.apache.org/foundation/marks/
@@ -326,44 +401,29 @@ https://www.python.org/psf/trademarks/
 
 Java is a trademark of Oracle and/or its affiliates.
 
-Este instalador no usa logotipos de Apache Spark ni de Eclipse. El nombre
-del producto no contiene Spark, PySpark, Hadoop, Python, Java ni Apache.
-
 This installer does not use Apache Spark or Eclipse logos. The product
 name does not include Spark, PySpark, Hadoop, Python, Java, or Apache.
 
 ================================================================================
-Aviso de licencias / License notice
+License notice
 ================================================================================
-
-Este instalador copia un runtime local que incluye Apache Spark y PySpark.
-No cambia la licencia del software de terceros: cada componente conserva
-su copyright y su licencia original. Las versiones de esta copia se leyeron
-de config/versions.json durante la construccion del instalador.
 
 This installer copies a local runtime that includes Apache Spark and
 PySpark. It does not relicense third-party software: each component keeps
 its original copyright and license. The versions in this copy were read
 from config/versions.json when the installer was built.
 
-$($Config.productName) entrega este runtime "TAL CUAL" / "AS IS", sin
-garantia de ningun tipo, en la medida permitida por la ley.
+$($Config.productName) delivers this runtime "AS IS", without warranty of any kind,
+to the extent permitted by law.
 
 By installing, you accept the terms of each bundled component.
 
 ================================================================================
-Componentes de esta copia / Components in this copy
+Components in this copy
 ================================================================================
 
-  $($Config.productName.PadRight(28))$($Config.productVersion)
-  $('Eclipse Temurin JDK'.PadRight(28))$($Config.javaMajorVersion.ToString().PadRight(10))GPLv2 + Classpath Exception
-  $('Apache Spark'.PadRight(28))$($Config.sparkVersion.PadRight(10))Apache License 2.0
-  $('PySpark'.PadRight(28))$($Config.pysparkVersion.PadRight(10))Apache License 2.0
-  $('ipykernel'.PadRight(28))$($Config.ipykernelVersion.PadRight(10))BSD 3-Clause
-  $('Apache Hadoop winutils'.PadRight(28))$($Config.hadoopWinutilsVersion.PadRight(10))Apache License 2.0
-  $('CPython'.PadRight(28))$($Config.pythonVersion.PadRight(10))PSF License Version 2
+$($componentTable.TrimEnd())
 
-Las licencias completas viajan con cada componente:
 Complete license texts ship with each component:
 
   java\     LICENSE, legal\          Eclipse Temurin / OpenJDK
@@ -372,9 +432,13 @@ Complete license texts ship with each component:
   python\   LICENSE.txt              CPython
   python\   Lib\site-packages        PySpark, ipykernel and pip dependencies
 
-Este archivo no es una segunda fuente canonica de versiones.
 This file is not a second canonical source of version numbers.
 
+The following sections reproduce or summarize each license in its original language.
+"@
+    }
+
+    $notices = @"
 ================================================================================
 1. Eclipse Temurin (OpenJDK)
 ================================================================================
@@ -503,17 +567,9 @@ POSSIBILITY OF SUCH DAMAGE.
 ipykernel $($Config.ipykernelVersion) is installed with its Python
 dependencies (IPython, jupyter_client, traitlets, pyzmq and others).
 Those packages keep their own licenses under python\Lib\site-packages.
+"@
 
-================================================================================
-6. $($Config.productName) installer
-================================================================================
-
-Copyright (C) 2026 the $($Config.productName) contributors
-
-The installer, wizard and packaging scripts are original work that copies
-and configures the components listed above. They do not replace those
-licenses.
-
+    $mitLicense = @"
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this installer code and associated documentation files (the
 "Software"), to deal in the Software without restriction, including
@@ -532,9 +588,52 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+"@
+
+    if ($Language -eq 'spanish') {
+        $closing = @"
+================================================================================
+6. Instalador $($Config.productName)
+================================================================================
+
+Copyright (C) 2026 the $($Config.productName) contributors
+
+El instalador, el asistente y los scripts de empaquetado son obra original
+que copia y configura los componentes anteriores. No sustituyen esas
+licencias.
+
+Licencia MIT (texto original):
+
+$($mitLicense.TrimEnd())
+
+Generado desde config/versions.json durante la construcción del instalador.
+"@
+    }
+    else {
+        $closing = @"
+================================================================================
+6. $($Config.productName) installer
+================================================================================
+
+Copyright (C) 2026 the $($Config.productName) contributors
+
+The installer, wizard and packaging scripts are original work that copies
+and configures the components listed above. They do not replace those
+licenses.
+
+MIT License (original text):
+
+$($mitLicense.TrimEnd())
 
 Generated from config/versions.json during the installer build.
 "@
+    }
+
+    $text = @(
+        $preface.TrimEnd(),
+        $notices.TrimEnd(),
+        $closing.TrimEnd()
+    ) -join ([Environment]::NewLine + [Environment]::NewLine)
 
     $legacyProductInfo = Join-Path (Split-Path -Parent $Path) 'PRODUCT_INFO.txt'
     if (Test-Path $legacyProductInfo) {
@@ -1096,7 +1195,12 @@ if (-not $SkipDownload) {
 
 Write-Step "Sincronizando scripts y config en staging"
 Sync-StagingAssets -Root $stagingDir
-Write-LicenseFile -Path (Join-Path $stagingDir 'LICENSE.txt') -Config $config
+Write-LicenseFile -Path (Join-Path $stagingDir 'LICENSE.es.txt') -Config $config -Language spanish
+Write-LicenseFile -Path (Join-Path $stagingDir 'LICENSE.en.txt') -Config $config -Language english
+$legacyBilingualLicense = Join-Path $stagingDir 'LICENSE.txt'
+if (Test-Path -LiteralPath $legacyBilingualLicense) {
+    Remove-Item -LiteralPath $legacyBilingualLicense -Force
+}
 Copy-WinutilsLegalFiles `
     -RepoRoot (Join-Path $stagingDir '.no-winutils-repo') `
     -HadoopDir (Join-Path $stagingDir 'hadoop') `
@@ -1108,7 +1212,8 @@ $requiredStagingFiles = @(
     (Join-Path $stagingDir 'hadoop\bin\winutils.exe'),
     (Join-Path $stagingDir 'config\versions.json'),
     (Join-Path $stagingDir 'scripts\post-install.ps1'),
-    (Join-Path $stagingDir 'LICENSE.txt'),
+    (Join-Path $stagingDir 'LICENSE.es.txt'),
+    (Join-Path $stagingDir 'LICENSE.en.txt'),
     (Join-Path $stagingDir 'python\python.exe')
 )
 $missingStagingFiles = @($requiredStagingFiles | Where-Object { -not (Test-Path $_) })

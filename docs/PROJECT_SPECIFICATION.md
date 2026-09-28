@@ -95,11 +95,14 @@ El manifiesto describe entradas de descarga, pero no implementa actualmente
 checksums ni un schema JSON validado automáticamente. Esta es una limitación
 conocida, no una garantía de integridad.
 
-Durante el build se genera `LICENSE.txt` a partir de este manifiesto. Es un
-aviso de copyright y licencias de los componentes empaquetados (estilo NOTICE
-de Apache Spark), instalado junto al runtime y mostrado en el wizard. No es
-otra fuente canónica de versiones; las licencias completas viajan dentro de
-`java/`, `spark/` y `python/`.
+Durante el build se generan `LICENSE.es.txt` y `LICENSE.en.txt` a partir de
+este manifiesto. Cada uno es un aviso de copyright y licencias de los
+componentes empaquetados (estilo NOTICE de Apache Spark). El texto propio de
+DataForge sigue el idioma del archivo; las licencias de terceros permanecen
+en su idioma original. El wizard muestra el aviso del idioma elegido y lo
+instala junto al runtime como `LICENSE.txt`. No es otra fuente canónica de
+versiones; las licencias completas viajan dentro de `java/`, `spark/` y
+`python/`.
 
 ## 6. Contrato de build
 
@@ -114,7 +117,7 @@ La única entrada de build soportada es
    incluido `staging/python`;
 4. valida el staging existente cuando se omite la descarga;
 5. sincroniza configuración y scripts en staging (el `.exe` los extrae a
-   `{tmp}`, no a `{app}`), y genera `LICENSE.txt`;
+   `{tmp}`, no a `{app}`), y genera `LICENSE.es.txt` y `LICENSE.en.txt`;
 6. invoca `ISCC.exe` con los defines derivados de la configuración, salvo que
    se indique `-SkipCompile`.
 

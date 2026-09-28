@@ -46,12 +46,14 @@ extracción. Su función es transversal:
 flowchart TD
     config["versions.json"] --> download["Download and extraction"]
     config --> defines["ISCC compile defines"]
-    config --> licenseFile["Generated LICENSE.txt"]
+    config --> licenseFile["Generated LICENSE.es.txt and LICENSE.en.txt"]
     config --> readmes["README.md and README_developers.md"]
 ```
 
 El build traduce sus campos a defines de Inno Setup y genera
-`LICENSE.txt` (aviso de copyright y licencias de los componentes empaquetados).
+`LICENSE.es.txt` y `LICENSE.en.txt` (aviso de copyright y licencias de los
+componentes empaquetados). El texto propio de DataForge va en el idioma del
+archivo; las licencias de terceros quedan en su idioma original.
 Los scripts PowerShell leen la configuración extraída a `{tmp}` solo
 durante la post-instalación; los accesos directos usan los defines y no retienen
 la configuración como dependencia de runtime. Por tanto, un valor de versión no
@@ -76,14 +78,14 @@ flowchart TD
     resetStage --> extract["Extract Java, Spark and winutils"]
     extract --> pythonRuntime["Install official CPython and pip install PySpark and ipykernel"]
     pythonRuntime --> sync["Copy temp config and scripts"]
-    sync --> licenseFile["Generate LICENSE.txt"]
+    sync --> licenseFile["Generate LICENSE.es.txt and LICENSE.en.txt"]
     licenseFile --> checkCompiler["Locate ISCC.exe"]
     checkCompiler --> compile["Compile DataForge.iss"]
     compile --> executable["installer/dist/*.exe"]
 ```
 
 El staging se reconstruye con las carpetas `java`, `spark`, `hadoop`, `python`,
-`config` y `scripts`, además de `LICENSE.txt`. Los binarios de Java,
+`config` y `scripts`, además de `LICENSE.es.txt` y `LICENSE.en.txt`. Los binarios de Java,
 Spark, winutils y el prefijo CPython con PySpark e ipykernel se copian al staging.
 `config/` y `scripts/` se empaquetan en el `.exe` pero no se copian a `{app}`:
 el wizard los extrae a `{tmp}` solo mientras corre la post-instalación.
@@ -105,7 +107,7 @@ build, empaqueta el staging y declara:
 
 - instalación para Windows x64;
 - interfaz en español e inglés;
-- `LicenseFile` apuntando al `LICENSE.txt` generado (página de aceptación);
+- `LicenseFile` por idioma (`LICENSE.es.txt` o `LICENSE.en.txt`) en la página de aceptación; el idioma elegido se copia a `{app}` como `LICENSE.txt`;
 - archivos, accesos directos y ejecución opcional de Apache Spark shell;
 - directivas de borrado de la instalación;
 - inclusión de [`wizard-code.iss`](../installer/wizard-code.iss).
@@ -213,8 +215,8 @@ flowchart LR
 ```
 
 Además, `setup-env.ps1` persiste las variables y rutas absolutas para terminales
-nuevas. `LICENSE.txt` queda como aviso de licencias y versiones de esa copia, y
-no se consulta para lanzar PySpark.
+nuevas. `LICENSE.txt` queda como aviso de licencias y versiones de esa copia,
+en el idioma elegido en el wizard, y no se consulta para lanzar PySpark.
 
 ## 6. Desinstalación
 

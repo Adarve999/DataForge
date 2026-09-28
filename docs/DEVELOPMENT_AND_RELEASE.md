@@ -59,7 +59,7 @@ Opciones relevantes:
 ```
 
 `-SkipDownload` no evita las comprobaciones: el script exige los binarios,
-configuración, scripts, `LICENSE.txt` y `python\python.exe` que conforman
+configuración, scripts, `LICENSE.es.txt`, `LICENSE.en.txt` y `python\python.exe` que conforman
 un staging válido.
 
 Si ISCC aborta con `EndUpdateResource failed (110)` al actualizar iconos de
@@ -165,7 +165,7 @@ Antes de distribuir un ejecutable:
       kernelspec de usuario y una `SparkSession` local.
 - [ ] Los accesos directos de Apache Spark shell y Python se comprobaron desde una ruta con espacios.
 - [ ] `where spark-shell` resuelve el binario bajo el directorio de instalación.
-- [ ] `LICENSE.txt` lista las mismas versiones que `config/versions.json` y se muestra como contrato de licencia del wizard.
+- [ ] El aviso del idioma elegido lista las mismas versiones que `config/versions.json`, el wizard lo muestra en ese idioma y `{app}\LICENSE.txt` es esa copia.
 - [ ] Tras finalizar el wizard, la raíz solo contiene los cuatro directorios de runtime, `LICENSE.txt` y `unins*`.
 - [ ] Las entradas de `PATH` de DataForge son rutas absolutas y la
       desinstalación elimina también las formas heredadas `%VARIABLE%`.

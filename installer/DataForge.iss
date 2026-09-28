@@ -45,7 +45,6 @@ DisableProgramGroupPage=yes
 DisableReadyPage=no
 DisableFinishedPage=no
 AllowCancelDuringInstall=yes
-LicenseFile={#StagingDir}\LICENSE.txt
 OutputDir={#OutputDir}
 OutputBaseFilename={#MyAppName}-Setup-{#MyAppVersion}
 SetupIconFile=assets\setup.ico
@@ -76,8 +75,10 @@ UsePreviousLanguage=yes
 DirExistsWarning=auto
 
 [Languages]
-Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
-Name: "english"; MessagesFile: "compiler:Default.isl"
+; El texto propio de DataForge sigue el idioma elegido. Las licencias de
+; terceros permanecen en su idioma original dentro de cada archivo.
+Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"; LicenseFile: "{#StagingDir}\LICENSE.es.txt"
+Name: "english"; MessagesFile: "compiler:Default.isl"; LicenseFile: "{#StagingDir}\LICENSE.en.txt"
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
@@ -87,7 +88,8 @@ Source: "{#StagingDir}\java\*"; DestDir: "{app}\java"; Flags: ignoreversion recu
 Source: "{#StagingDir}\spark\*"; DestDir: "{app}\spark"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#StagingDir}\hadoop\*"; DestDir: "{app}\hadoop"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "{#StagingDir}\python\*"; DestDir: "{app}\python"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "{#StagingDir}\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#StagingDir}\LICENSE.es.txt"; DestDir: "{app}"; DestName: "LICENSE.txt"; Languages: spanish; Flags: ignoreversion
+Source: "{#StagingDir}\LICENSE.en.txt"; DestDir: "{app}"; DestName: "LICENSE.txt"; Languages: english; Flags: ignoreversion
 ; Payload de post-instalacion: no se copia a {app}. ExtractTemporaryFile lo
 ; materializa en {tmp} solo mientras corre PowerShell. uninstall-env.ps1
 ; permanece en el repo como utilidad y no viaja en el .exe.

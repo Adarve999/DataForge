@@ -19,6 +19,10 @@
   fichas de la raíz. El parser de PowerShell aceptó `build-installer.ps1`.
   No se reejecutó `test-post-install.ps1` ni se recorrió un reemplazo de
   instalación.
+- **Actualización 2026-09-28 (D-023):** `Write-LicenseFile` escribió
+  `installer/staging/LICENSE.es.txt` y `LICENSE.en.txt`. El parser aceptó
+  `build-installer.ps1`. No se recompiló el `.exe` ni se recorrió la página
+  de licencia del wizard.
 
 Esta página es una fotografía factual. Debe actualizarse después de validar
 cambios funcionales, no al inicio de una tarea.
@@ -28,7 +32,7 @@ cambios funcionales, no al inicio de una tarea.
 | Capacidad | Evidencia | Estado |
 | --- | --- | --- |
 | Preparar staging con Java, Spark, winutils y CPython+PySpark+ipykernel | `installer/build-installer.ps1` | ` -SkipCompile` ejecutado en este ciclo; CPython+PySpark+ipykernel en `staging/python` |
-| Generar `LICENSE.txt` con no afiliación y marcas | `Write-LicenseFile` | Código actualizado (D-018); no se regeneró el `.exe` |
+| Generar el aviso de licencia en el idioma del wizard | `Write-LicenseFile` | D-023: escribió `LICENSE.es.txt` y `LICENSE.en.txt` en staging; no se recompiló el `.exe` ni se abrió la página de licencia |
 | Generar ejecutable Inno Setup desde el build | `build-installer.ps1` y `DataForge.iss` | Implementada; el `.exe` de este ciclo no se recompiló |
 | Extraer scripts y config solo a `{tmp}` | `[Files]` con `dontcopy` y `ExtractInstallerPayload` | Implementada (D-016); no se recorrió el wizard |
 | Reemplazar una copia previa en la misma carpeta | `EvaluateExistingInstallation` y página de reemplazo | Código actualizado (D-017); no se recorrió el wizard |

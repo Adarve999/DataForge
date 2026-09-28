@@ -73,11 +73,14 @@ documentos.
 
 Tras una instalación correcta, la raíz contiene `java/`, `spark/`, `hadoop/`,
 `python/`, `LICENSE.txt` y los archivos técnicos `unins*` de Inno Setup
-necesarios para desinstalar. `LICENSE.txt` se genera durante el build desde
-`config/versions.json`: lista las versiones de esa copia, el copyright y la
-licencia de cada componente (Temurin/OpenJDK, Spark, PySpark, Hadoop
-winutils, CPython e ipykernel) y apunta a los textos completos dentro de
-`java/`, `spark/` y `python/`. El wizard lo muestra como contrato de licencia.
+necesarios para desinstalar. El build genera `LICENSE.es.txt` y
+`LICENSE.en.txt` desde `config/versions.json`: listan las versiones de esa
+copia, el copyright y la licencia de cada componente (Temurin/OpenJDK, Spark,
+PySpark, Hadoop winutils, CPython e ipykernel) y apuntan a los textos
+completos dentro de `java/`, `spark/` y `python/`. El texto propio de
+DataForge va en el idioma del archivo; las licencias de terceros quedan en
+su idioma original. El wizard muestra el aviso del idioma elegido y lo copia
+como `LICENSE.txt`.
 
 ## Requisitos para construir el instalador
 
@@ -225,7 +228,7 @@ instalaciones de Python.
 
 Edita `config/versions.json`, regenera las fichas (`.\config\Update-Readme.ps1`)
 y vuelve a ejecutar `build-installer.ps1`. El build propaga esos valores al
-script de Inno Setup, a `LICENSE.txt` y a la post-instalación.
+script de Inno Setup, a `LICENSE.es.txt` y `LICENSE.en.txt`, y a la post-instalación.
 
 ## Notas
 
